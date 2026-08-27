@@ -3,74 +3,245 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AZ PRONO VIP</title>
+    <title>AZ PRONO - VIP</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background-color: #121212; color: white; text-align: center; padding: 15px; }
-        .container { max-width: 400px; margin: auto; }
-        .pay-box { background: #1e272e; border-radius: 12px; padding: 20px; border: 2px solid #f1c40f; margin-bottom: 20px; }
-        select, input { width: 95%; padding: 12px; margin: 10px 0; border-radius: 8px; border: none; font-size: 16px; background: #fff; }
-        .btn-send { background: #25D366; color: white; padding: 15px; border-radius: 8px; border: none; width: 100%; font-weight: bold; cursor: pointer; font-size: 16px; margin-top: 10px; }
-        .price-tag { color: #f1c40f; font-size: 26px; font-weight: bold; margin: 10px 0; display: block; }
-        .net { font-size: 14px; margin: 5px 0; padding: 8px; border-radius: 5px; font-weight: bold; }
-        .mtn { background: #ffcc00; color: black; }
-        .celtiis { background: #ff0000; color: white; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: #141414;
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            background-color: rgba(0, 0, 0, 0.85);
+            border-radius: 8px;
+            padding: 30px;
+            max-width: 450px;
+            width: 100%;
+            box-shadow: 0 4px 20px rgba(229, 9, 20, 0.2);
+            border: 1px solid #333;
+        }
+
+        .logo {
+            color: #E50914;
+            font-size: 2.2rem;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .disclaimer {
+            background-color: #222;
+            border-left: 4px solid #E50914;
+            padding: 12px;
+            font-size: 0.85rem;
+            color: #ccc;
+            margin-bottom: 25px;
+            border-radius: 2px;
+            line-height: 1.4;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+            color: #aaa;
+        }
+
+        select {
+            width: 100%;
+            padding: 12px;
+            background-color: #333;
+            border: 1px solid #444;
+            border-radius: 4px;
+            color: #fff;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        select:focus {
+            border-color: #E50914;
+        }
+
+        .payment-info {
+            background-color: #1f1f1f;
+            padding: 12px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+            color: #46d369;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .error-message {
+            background-color: rgba(229, 9, 20, 0.2);
+            border: 1px solid #E50914;
+            color: #ff4d4d;
+            padding: 12px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+            text-align: center;
+            display: none;
+        }
+
+        .btn-whatsapp {
+            width: 100%;
+            background-color: #E50914;
+            color: #fff;
+            border: none;
+            padding: 15px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .btn-whatsapp:hover {
+            background-color: #f40612;
+        }
+
+        .btn-whatsapp:disabled {
+            background-color: #555;
+            cursor: not-allowed;
+        }
     </style>
 </head>
 <body>
+
     <div class="container">
-        <h1 style="color:#f1c40f;">🏆 AZ PRONO - VIP</h1>
-        
-        <div class="pay-box">
-            <p>1️⃣ CHOISISSEZ VOTRE COTE :</p>
-            <select id="cote_select" onchange="updatePrice()">
-                <option value="2" data-prix="50">Cote 2 (Ticket Safe) - 50 FCFA</option>
-                <option value="5" data-prix="100">Cote 5 (Gros Gain) - 100 FCFA</option>
-            </select>
+        <div class="logo">AZ PRONO VIP</div>
 
-            <span class="price-tag" id="display_price">PRIX : 50 FCFA</span>
-
-            <p>2️⃣ PAYEZ SUR :</p>
-            <div class="net mtn">🟡 MTN : +229 0151249201</div>
-            <div class="net celtiis">🔴 CELTIIS : +229 0192045713</div>
-            
-            <hr style="margin: 20px 0; border: 0.5px solid #444;">
-            
-            <p>3️⃣ VOS INFOS :</p>
-            <input type="text" id="nom" placeholder="Votre Nom et Prénom">
-            <input type="text" id="num_pay" placeholder="Numéro utilisé pour le dépôt">
-            
-            <button class="btn-send" onclick="envoyerWhatsApp()">✅ RECEVOIR MON CODE SUR WHATSAPP</button>
+        <div class="disclaimer">
+            <strong>Avertissement :</strong> Misez uniquement ce que vous êtes prêt à perdre. Je ne suis pas responsable de vos pertes, le risque zéro n'existe pas dans les paris sportifs.
         </div>
+
+        <div class="form-group">
+            <label for="country">Votre pays :</label>
+            <select id="country" onchange="updatePricesAndPayment()">
+                <option value="benin">Bénin (MTN)</option>
+                <option value="cotedivoire">Côte d'Ivoire (MTN)</option>
+                <option value="cameroun">Cameroun (MTN)</option>
+                <option value="ghana">Ghana (MTN)</option>
+                <option value="guinee">Guinée (MTN)</option>
+                <option value="france">France (PayPal)</option>
+                <option value="autre">Autre pays (Non supporté)</option>
+            </select>
+        </div>
+
+        <div id="errorMessage" class="error-message">
+            Désolé, les services AZ PRONO VIP ne sont pas disponibles dans votre pays. Seuls la France et les pays utilisant MTN Mobile Money sont acceptés.
+        </div>
+
+        <div id="oddsGroup" class="form-group">
+            <label for="odds">Choisissez votre cote :</label>
+            <select id="odds">
+                <!-- Généré dynamiquement -->
+            </select>
+        </div>
+
+        <div class="payment-info" id="paymentMethodDisplay">
+            Paiement direct sur WhatsApp (MTN Mobile Money)
+        </div>
+
+        <button class="btn-whatsapp" id="btnWhatsapp" onclick="sendToWhatsApp()">Payer sur WhatsApp</button>
     </div>
 
     <script>
-        function updatePrice() {
-            var select = document.getElementById('cote_select');
-            var prix = select.options[select.selectedIndex].getAttribute('data-prix');
-            document.getElementById('display_price').innerText = "PRIX : " + prix + " FCFA";
-        }
+        const myPhoneNumber = "2290151249201";
 
-        function envoyerWhatsApp() {
-            var nom = document.getElementById('nom').value;
-            var num = document.getElementById('num_pay').value;
-            var cote = document.getElementById('cote_select').value;
-            var prix = document.getElementById('cote_select').options[document.getElementById('cote_select').selectedIndex].getAttribute('data-prix');
-            
-            if(nom == "" || num == "") {
-                alert("Veuillez remplir votre nom et le numéro de dépôt !");
-                return;
+        const priceList = {
+            cfa: [
+                { text: "Cote 2 — 150 FCFA", value: "Cote 2 (150 FCFA)" },
+                { text: "Cote 3 — 250 FCFA", value: "Cote 3 (250 FCFA)" },
+                { text: "Cote 4 — 450 FCFA", value: "Cote 4 (450 FCFA)" },
+                { text: "Cote 5 — 500 FCFA", value: "Cote 5 (500 FCFA)" },
+                { text: "Cote 10 — 700 FCFA", value: "Cote 10 (700 FCFA)" }
+            ],
+            eur: [
+                { text: "Cote 2 — 1 €", value: "Cote 2 (1 €)" },
+                { text: "Cote 3 — 2 €", value: "Cote 3 (2 €)" },
+                { text: "Cote 4 — 3 €", value: "Cote 4 (3 €)" },
+                { text: "Cote 5 — 4 €", value: "Cote 5 (4 €)" },
+                { text: "Cote 10 — 7 €", value: "Cote 10 (7 €)" }
+            ]
+        };
+
+        function updatePricesAndPayment() {
+            const country = document.getElementById("country").value;
+            const oddsSelect = document.getElementById("odds");
+            const oddsGroup = document.getElementById("oddsGroup");
+            const display = document.getElementById("paymentMethodDisplay");
+            const errorMessage = document.getElementById("errorMessage");
+            const btnWhatsapp = document.getElementById("btnWhatsapp");
+
+            if (country === "autre") {
+                // Pays non autorisé : Masquer les choix et bloquer le bouton
+                errorMessage.style.display = "block";
+                oddsGroup.style.display = "none";
+                display.style.display = "none";
+                btnWhatsapp.disabled = true;
+            } else {
+                // Pays autorisé : Afficher le formulaire normalement
+                errorMessage.style.display = "none";
+                oddsGroup.style.display = "block";
+                display.style.display = "block";
+                btnWhatsapp.disabled = false;
+
+                oddsSelect.innerHTML = "";
+                let selectedPrices = (country === "france") ? priceList.eur : priceList.cfa;
+
+                selectedPrices.forEach(item => {
+                    let option = document.createElement("option");
+                    option.value = item.value;
+                    option.text = item.text;
+                    oddsSelect.appendChild(option);
+                });
+
+                if (country === "france") {
+                    display.innerText = "Paiement direct sur WhatsApp (PayPal)";
+                } else {
+                    display.innerText = "Paiement direct sur WhatsApp (MTN Mobile Money)";
+                }
             }
-
-            var message = "Salut AZ PRONO !\n\n" +
-                          "💰 J'ai payé " + prix + " FCFA\n" +
-                          "🎯 Pour la COTE : " + cote + "\n" +
-                          "👤 Nom : " + nom + "\n" +
-                          "📱 N° Dépôt : " + num;
-            
-            // Redirection vers ton numéro MTN
-            var url = "https://wa.me/2290151249201?text=" + encodeURIComponent(message);
-            window.location.href = url;
         }
+
+        function sendToWhatsApp() {
+            const countrySelect = document.getElementById("country");
+            const countryText = countrySelect.options[countrySelect.selectedIndex].text;
+            const selectedOdds = document.getElementById("odds").value;
+            const paymentInfo = document.getElementById("paymentMethodDisplay").innerText;
+
+            const message = `Bonjour AZ PRONO !\n\nJe suis intéressé par votre service VIP.\n- Pays : ${countryText}\n- Offre choisie : ${selectedOdds}\n- Mode de règlement : ${paymentInfo}\n\nJe souhaite effectuer mon paiement directement avec vous ici sur WhatsApp.`;
+
+            const encodedMessage = encodeURIComponent(message);
+            const whatsappUrl = `https://wa.me/${myPhoneNumber}?text=${encodedMessage}`;
+
+            window.open(whatsappUrl, '_blank');
+        }
+
+        // Initialisation au chargement
+        updatePricesAndPayment();
     </script>
+
 </body>
 </html>
