@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cine-Flix BJ - Streaming & Pronostics</title>
+    <title>AZ Prono - Analyses & Pronostics Sportifs</title>
     <style>
         :root {
             --primary-color: #e50914;
@@ -11,6 +11,7 @@
             --card-bg: #1f1f1f;
             --text-color: #ffffff;
             --gray-text: #b3b3b3;
+            --verified-blue: #1d9bf0;
         }
 
         * {
@@ -31,42 +32,56 @@
             justify-content: space-between;
             align-items: center;
             padding: 20px 5%;
-            background: rgba(0, 0, 0, 0.9);
+            background: rgba(0, 0, 0, 0.95);
             position: fixed;
             top: 0;
             width: 100%;
             z-index: 1000;
+            border-bottom: 2px solid #222;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .logo {
             color: var(--primary-color);
-            font-size: 24px;
+            font-size: 26px;
             font-weight: bold;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 2px;
+        }
+
+        .verified-badge {
+            color: var(--verified-blue);
+            font-size: 20px;
+            display: flex;
+            align-items: center;
         }
 
         .hero {
-            height: 60vh;
+            height: 65vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             text-align: center;
             padding: 0 20px;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.5), var(--bg-color)), url('https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?auto=format&fit=crop&w=1200&q=80') no-repeat center center/cover;
-            margin-top: 60px;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.6), var(--bg-color)), url('https://images.unsplash.com/photo-1518091043644-c1d4457512c6?auto=format&fit=crop&w=1200&q=80') no-repeat center center/cover;
+            margin-top: 70px;
         }
 
         .hero h1 {
-            font-size: 2.3rem;
+            font-size: 2.5rem;
             margin-bottom: 15px;
         }
 
         .hero p {
             font-size: 1.1rem;
             color: var(--gray-text);
-            max-width: 600px;
+            max-width: 650px;
             margin-bottom: 25px;
         }
 
@@ -100,8 +115,36 @@
             padding-left: 10px;
         }
 
-        /* Section Recherche de Matchs & Côtes */
-        .search-section {
+        /* Section Grille des Tarifs par pays */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px;
+            margin-bottom: 40px;
+        }
+
+        .price-card {
+            background-color: var(--card-bg);
+            border: 1px solid #333;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .price-card h3 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+
+        .price-card p {
+            color: var(--gray-text);
+            font-size: 0.95rem;
+            margin-bottom: 5px;
+        }
+
+        /* Section Personnalisation des équipes & Côtes */
+        .custom-section {
             background-color: var(--card-bg);
             padding: 25px;
             border-radius: 8px;
@@ -109,14 +152,32 @@
             box-shadow: 0 4px 6px rgba(0,0,0,0.3);
         }
 
-        .search-box {
-            display: flex;
-            gap: 10px;
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
             margin-bottom: 20px;
         }
 
-        .search-box input {
-            flex: 1;
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group label {
+            font-size: 0.9rem;
+            color: var(--gray-text);
+            font-weight: bold;
+        }
+
+        .form-group input, .form-group select {
             padding: 12px;
             border: 1px solid #333;
             background-color: #2a2a2a;
@@ -149,14 +210,30 @@
 
         .result-box {
             background: #111;
-            padding: 15px;
+            padding: 20px;
             border-radius: 4px;
             border-left: 3px solid #f5c518;
-            min-height: 60px;
+            min-height: 80px;
             color: var(--gray-text);
+            margin-bottom: 15px;
         }
 
-        /* Styles des avis clients */
+        .whatsapp-btn {
+            display: none;
+            background-color: #25d366;
+            color: white;
+            text-align: center;
+            padding: 12px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .whatsapp-btn:hover {
+            background-color: #20ba5a;
+        }
+
         .reviews-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -201,7 +278,6 @@
             font-size: 0.95rem;
         }
 
-        /* Section Avertissement 18+ */
         .age-warning {
             background-color: #2b1d1d;
             border: 1px solid var(--primary-color);
@@ -219,6 +295,7 @@
         .age-warning p {
             color: var(--gray-text);
             font-size: 0.95rem;
+            margin-bottom: 8px;
         }
 
         footer {
@@ -234,37 +311,82 @@
 <body>
 
     <header>
-        <div class="logo">Cine-Flix BJ</div>
-        <a href="#recherche" class="btn" style="padding: 8px 15px; font-size: 0.9rem;">Pronostics</a>
+        <div class="logo-container">
+            <div class="logo">AZ Prono</div>
+            <div class="verified-badge" title="Compte Certifié">✔</div>
+        </div>
+        <a href="#personnalisation" class="btn" style="padding: 8px 15px; font-size: 0.9rem;">Commander</a>
     </header>
 
     <section class="hero">
-        <h1>Le meilleur du divertissement et des analyses</h1>
-        <p>Recherchez vos équipes du jour et obtenez vos sélections sur mesure en toute sécurité.</p>
-        <a href="#recherche" class="btn">Générer un pronostic</a>
+        <h1>L'excellence dans les analyses sportives</h1>
+        <p>Commandez vos sélections personnalisées et profitez de l'expertise de nos spécialistes reconnus depuis plus d'un an.</p>
+        <a href="#personnalisation" class="btn">Créer mon pronostic sur mesure</a>
     </section>
 
     <div class="container">
         
-        <h2 id="recherche">Recherche d'équipes & Générateur de Côtes</h2>
-        <div class="search-section">
-            <div class="search-box">
-                <input type="text" id="teamInput" placeholder="Entrez une équipe (ex: Real Madrid, PSG, Requins...)...">
-                <button class="btn" onclick="searchMatch()">Rechercher</button>
+        <!-- Grille des Tarifs par Pays -->
+        <h2>Grille Tarifaire par Pays</h2>
+        <div class="pricing-grid">
+            <div class="price-card">
+                <h3>🇧🇯 Bénin</h3>
+                <p><strong>Côte 2 :</strong> 2 000 FCFA</p>
+                <p><strong>Côte 3 :</strong> 3 500 FCFA</p>
+            </div>
+            <div class="price-card">
+                <h3>🇨🇮 Côte d'Ivoire</h3>
+                <p><strong>Côte 2 :</strong> 2 000 FCFA</p>
+                <p><strong>Côte 3 :</strong> 3 500 FCFA</p>
+            </div>
+            <div class="price-card">
+                <h3>🇸🇳 Sénégal</h3>
+                <p><strong>Côte 2 :</strong> 2 000 FCFA</p>
+                <p><strong>Côte 3 :</strong> 3 500 FCFA</p>
+            </div>
+            <div class="price-card">
+                <h3>🇫🇷 France</h3>
+                <p><strong>Côte 2 :</strong> 5 €</p>
+                <p><strong>Côte 3 :</strong> 8 €</p>
+            </div>
+        </div>
+
+        <!-- Section Choix Personnalisé des Équipes & Côtes -->
+        <h2 id="personnalisation">Demande de Pronostic Personnalisé</h2>
+        <div class="custom-section">
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="countrySelect">Votre pays :</label>
+                    <select id="countrySelect">
+                        <option value="BJ">🇧🇯 Bénin</option>
+                        <option value="CI">🇨🇮 Côte d'Ivoire</option>
+                        <option value="SN">🇸🇳 Sénégal</option>
+                        <option value="FR">🇫🇷 France</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="teamsInput">Vos équipes choisies :</label>
+                    <input type="text" id="teamsInput" placeholder="Ex: Real Madrid, Arsenal, PSG...">
+                </div>
             </div>
             
-            <div style="margin-bottom: 10px; font-size: 0.9rem; color: var(--gray-text);">Choisissez votre objectif de pari :</div>
+            <div style="margin-bottom: 10px; font-size: 0.9rem; color: var(--gray-text);">Choisissez votre objectif de côte :</div>
             <div class="target-buttons">
                 <button class="target-btn active" id="btnCote2" onclick="setTarget('cote2')">Viser une Côte 2.00</button>
                 <button class="target-btn" id="btnCote3" onclick="setTarget('cote3')">Viser une Côte 3.00</button>
             </div>
 
+            <button class="btn" style="width: 100%; margin-bottom: 20px;" onclick="generateRequest()">Valider ma sélection sur mesure</button>
+
             <div class="result-box" id="resultOutput">
-                Tapez le nom d'une équipe ci-dessus pour simuler la recherche du match du jour et composer la sélection.
+                Renseignez vos équipes et votre pays pour valider votre ticket personnalisé auprès de notre expert.
             </div>
+
+            <a id="whatsappBtn" class="whatsapp-btn" href="#" target="_blank">📲 Envoyer ma commande à l'expert sur WhatsApp</a>
         </div>
 
-        <h2>Ce que pensent nos utilisateurs</h2>
+        <!-- Section Avis Clients -->
+        <h2>Ce que disent nos utilisateurs fidèles</h2>
         <div class="reviews-grid">
             <div class="review-card">
                 <div class="review-header">
@@ -272,7 +394,7 @@
                     <span class="review-country">🇧🇯 Bénin</span>
                 </div>
                 <div class="stars">★★★★★</div>
-                <p class="review-text">Franchement top ! La plateforme est fluide et les analyses m'ont évité de faire n'importe quoi avec mes paris.</p>
+                <p class="review-text">Client fidèle depuis plus d'un an. Choisir ses propres équipes et recevoir l'analyse adaptée, c'est le meilleur système.</p>
             </div>
 
             <div class="review-card">
@@ -280,17 +402,8 @@
                     <span class="review-author">Aïcha M.</span>
                     <span class="review-country">🇧🇯 Bénin</span>
                 </div>
-                <div class="stars">★★★★☆</div>
-                <p class="review-text">Très bonne expérience depuis Cotonou. Le site charge super vite et c'est propre.</p>
-            </div>
-
-            <div class="review-card">
-                <div class="review-header">
-                    <span class="review-author">Thomas L.</span>
-                    <span class="review-country">🇫🇷 France</span>
-                </div>
                 <div class="stars">★★★★★</div>
-                <p class="review-text">Interface intuitive, rien à redire. Je recommande vivement pour tous les passionnés.</p>
+                <p class="review-text">Depuis Cotonou, les tarifs sont clairs et le service WhatsApp est ultra rapide. Du travail de pro.</p>
             </div>
 
             <div class="review-card">
@@ -299,7 +412,7 @@
                     <span class="review-country">🇨🇮 Côte d'Ivoire</span>
                 </div>
                 <div class="stars">★★★★★</div>
-                <p class="review-text">Incroyable ! Simple d'utilisation et très professionnel. Continuez comme ça.</p>
+                <p class="review-text">Service transparent, pas de fausses promesses. On sait ce qu'on paie et l'analyse est de qualité.</p>
             </div>
 
             <div class="review-card">
@@ -308,22 +421,56 @@
                     <span class="review-country">🇸🇳 Sénégal</span>
                 </div>
                 <div class="stars">★★★★☆</div>
-                <p class="review-text">Super site, j'aime beaucoup la présentation et la clarté des informations fournies.</p>
+                <p class="review-text">Super concept à Dakar. Les conseils de gestion de capital m'aident à rester raisonnable.</p>
+            </div>
+
+            <div class="review-card">
+                <div class="review-header">
+                    <span class="review-author">Thomas L.</span>
+                    <span class="review-country">🇫🇷 France</span>
+                </div>
+                <div class="stars">★★★★★</div>
+                <p class="review-text">Plus d'un an de confiance. La possibilité de choisir ses matchs avec un tarif fixe est top.</p>
             </div>
         </div>
 
+        <!-- Avertissements Légaux & Gestion des Risques -->
         <div class="age-warning">
-            <h3>Avertissement - Réservé aux 18 ans et plus</h3>
-            <p>Conformément à la réglementation en vigueur sur les jeux et paris sportifs, l'accès à nos services de pronostics est strictement interdit aux mineurs de moins de 18 ans. Jouez de manière responsable.</p>
+            <h3>Avertissements, Sécurité & Gestion des Risques</h3>
+            <p><strong>Restrictions :</strong> Service réservé exclusivement aux adultes (18 ans et plus, voire 28 ans selon les législations locales de votre pays).</p>
+            <p><strong>Règles d'or :</strong> Le risque zéro n'existe pas dans les paris sportifs. Ne courez jamais aveuglément derrière vos pertes pour essayer de les rattraper. Ne misez que l'argent que vous êtes totalement prêt à perdre.</p>
         </div>
     </div>
 
     <footer>
-        <p>&copy; 2026 Cine-Flix BJ. Tous droits réservés.</p>
+        <p>&copy; 2026 AZ Prono. Tous droits réservés. Fondé depuis plus d'un an.</p>
     </footer>
 
     <script>
         let currentTarget = 'cote2';
+        
+        const countryData = {
+            'BJ': { 
+                name: 'Koffi (Expert Bénin)', 
+                phone: '2290100000000', 
+                prices: { 'cote2': '2 000 FCFA', 'cote3': '3 500 FCFA' } 
+            },
+            'CI': { 
+                name: 'Kouassi (Expert Côte d\'Ivoire)', 
+                phone: '2250100000000', 
+                prices: { 'cote2': '2 000 FCFA', 'cote3': '3 500 FCFA' } 
+            },
+            'SN': { 
+                name: 'Fatou (Expert Sénégal)', 
+                phone: '221700000000', 
+                prices: { 'cote2': '2 000 FCFA', 'cote3': '3 500 FCFA' } 
+            },
+            'FR': { 
+                name: 'Thomas (Expert France)', 
+                phone: '33600000000', 
+                prices: { 'cote2': '5 €', 'cote3': '8 €' } 
+            }
+        };
 
         function setTarget(target) {
             currentTarget = target;
@@ -331,24 +478,31 @@
             document.getElementById('btnCote3').classList.toggle('active', target === 'cote3');
         }
 
-        function searchMatch() {
-            const input = document.getElementById('teamInput').value.trim();
+        function generateRequest() {
+            const teamsInput = document.getElementById('teamsInput').value.trim();
+            const country = document.getElementById('countrySelect').value;
             const output = document.getElementById('resultOutput');
+            const whatsappBtn = document.getElementById('whatsappBtn');
 
-            if (!input) {
-                output.innerHTML = "<span style='color: #e50914;'>Veuillez saisir le nom d'une équipe s'il vous plaît.</span>";
+            if (!teamsInput) {
+                output.innerHTML = "<span style='color: var(--primary-color);'>Veuillez entrer les équipes de votre choix pour continuer.</span>";
+                whatsappBtn.style.display = 'none';
                 return;
             }
 
-            // Simulation de recherche de match du jour avec calcul de côte
-            output.innerHTML = `Recherche du match pour <strong>${input}</strong> en cours...`;
-            
-            setTimeout(() => {
-                let coteText = currentTarget === 'cote2' ? "Côte visée : 2.05 (Match du jour trouvé)" : "Côte visée : 3.15 (Combiné optimisé trouvé)";
-                output.innerHTML = `✅ <strong>Match du jour identifié pour : ${input}</strong><br>
-                📊 ${coteText}<br>
-                💡 <em>Conseil :</em> Validation conseillée avec une mise modérée.`;
-            }, 600);
+            const data = countryData[country];
+            let coteLabel = currentTarget === 'cote2' ? 'Objectif Côte 2.00' : 'Objectif Côte 3.00';
+            let servicePrice = data.prices[currentTarget];
+
+            output.innerHTML = `✅ <strong>Sélection enregistrée pour : ${teamsInput}</strong><br>
+            👤 Expert assigné : <strong>${data.name}</strong><br>
+            📊 Type demandé : ${coteLabel}<br>
+            💰 <strong>Tarif fixe : ${servicePrice}</strong><br>
+            🛡️ <em>Rappel :</em> Le risque zéro n'existe pas. Ne courez jamais après vos pertes.`;
+
+            let message = `Bonjour ${data.name}, je souhaite valider un pronostic sur mesure pour les équipes : ${teamsInput} (${coteLabel}) au tarif de ${servicePrice}.`;
+            whatsappBtn.href = `https://wa.me/${data.phone}?text=${encodeURIComponent(message)}`;
+            whatsappBtn.style.display = 'block';
         }
     </script>
 
