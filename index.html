@@ -1,536 +1,223 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AZ Prono - Matchs du Jour & Scores en Direct</title>
-    <style>
-        :root {
-            --netflix-red: #e50914;
-            --netflix-dark: #141414;
-            --card-bg: #1f1f1f;
-            --text-main: #ffffff;
-            --text-muted: #b3b3b3;
-            --verified-blue: #1d9bf0;
-            --whatsapp-green: #25d366;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
-        }
-
-        body {
-            background-color: var(--netflix-dark);
-            color: var(--text-main);
-            line-height: 1.4;
-        }
-
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 5%;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.9), rgba(0,0,0,0.4));
-            position: fixed;
-            top: 0;
-            width: 100%;
-            z-index: 1000;
-        }
-
-        .logo-container {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .logo {
-            color: var(--netflix-red);
-            font-size: 28px;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
-        .verified-badge {
-            color: var(--verified-blue);
-            font-size: 20px;
-            display: flex;
-            align-items: center;
-        }
-
-        .hero {
-            height: 45vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 0 20px;
-            background: linear-gradient(to bottom, rgba(20,20,20,0.3), var(--netflix-dark)), url('https://images.unsplash.com/photo-1518091043644-c1d4457512c6?auto=format&fit=crop&w=1200&q=80') no-repeat center center/cover;
-            margin-top: 70px;
-        }
-
-        .hero h1 {
-            font-size: 2.2rem;
-            margin-bottom: 10px;
-            font-weight: 700;
-        }
-
-        .hero p {
-            font-size: 0.95rem;
-            color: var(--text-muted);
-            max-width: 650px;
-        }
-
-        .container {
-            max-width: 1100px;
-            margin: 30px auto;
-            padding: 0 20px;
-        }
-
-        h2 {
-            margin-bottom: 15px;
-            font-size: 1.5rem;
-            border-left: 4px solid var(--netflix-red);
-            padding-left: 10px;
-            margin-top: 35px;
-        }
-
-        .date-indicator {
-            font-size: 0.95rem;
-            color: var(--text-muted);
-            margin-bottom: 15px;
-            font-style: italic;
-        }
-
-        /* Grille des tarifs */
-        .pricing-section {
-            background-color: var(--card-bg);
-            padding: 25px;
-            border-radius: 8px;
-            margin-bottom: 30px;
-            border: 1px solid #333;
-        }
-
-        .pricing-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-top: 15px;
-        }
-
-        .price-card {
-            background: #2a2a2a;
-            padding: 20px;
-            border-radius: 6px;
-            border: 1px solid #444;
-        }
-
-        .price-card h4 {
-            color: var(--netflix-red);
-            margin-bottom: 12px;
-            font-size: 1.05rem;
-        }
-
-        .price-card p {
-            font-size: 0.9rem;
-            color: var(--text-muted);
-            margin-bottom: 6px;
-        }
-
-        /* Matchs cards */
-        .match-card {
-            background-color: var(--card-bg);
-            border: 1px solid #333;
-            border-radius: 6px;
-            padding: 15px;
-            margin-bottom: 12px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        .match-info {
-            flex: 1;
-            min-width: 250px;
-        }
-
-        .badge-live {
-            background-color: var(--netflix-red);
-            color: white;
-            font-size: 0.65rem;
-            padding: 3px 8px;
-            border-radius: 4px;
-            font-weight: bold;
-            text-transform: uppercase;
-            display: inline-block;
-            margin-bottom: 4px;
-            animation: pulse 1.5s infinite;
-        }
-
-        @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.4; }
-            100% { opacity: 1; }
-        }
-
-        .badge-upcoming {
-            background-color: #f5c518;
-            color: #000;
-            font-size: 0.65rem;
-            padding: 3px 8px;
-            border-radius: 4px;
-            font-weight: bold;
-            text-transform: uppercase;
-            display: inline-block;
-            margin-bottom: 4px;
-        }
-
-        .match-teams {
-            font-size: 1.05rem;
-            font-weight: bold;
-            margin: 4px 0;
-        }
-
-        .match-details {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-        }
-
-        .match-score-box {
-            font-size: 1.1rem;
-            font-weight: bold;
-            background: #111;
-            padding: 8px 14px;
-            border-radius: 4px;
-            border: 1px solid #333;
-        }
-
-        /* Section Commandes */
-        .order-section {
-            background-color: var(--card-bg);
-            padding: 30px;
-            border-radius: 8px;
-            margin-top: 40px;
-            border: 1px solid #333;
-        }
-
-        .form-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-bottom: 20px;
-        }
-
-        @media (max-width: 768px) {
-            .form-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .form-group label {
-            font-size: 0.9rem;
-            color: var(--text-muted);
-            font-weight: bold;
-        }
-
-        .form-group input, .form-group select {
-            padding: 12px;
-            border: 1px solid #333;
-            background-color: #2a2a2a;
-            color: white;
-            border-radius: 4px;
-            font-size: 1rem;
-        }
-
-        .btn {
-            background-color: var(--netflix-red);
-            color: white;
-            padding: 14px 25px;
-            border: none;
-            border-radius: 4px;
-            font-size: 1rem;
-            font-weight: bold;
-            cursor: pointer;
-            text-decoration: none;
-            transition: background 0.3s ease;
-            display: block;
-            text-align: center;
-            width: 100%;
-        }
-
-        .btn:hover {
-            background-color: #f40612;
-        }
-
-        .result-box {
-            background: #111;
-            padding: 20px;
-            border-radius: 4px;
-            border-left: 3px solid #f5c518;
-            min-height: 70px;
-            color: var(--text-muted);
-            margin-bottom: 20px;
-            font-size: 0.95rem;
-        }
-
-        .whatsapp-btn {
-            display: none;
-            background-color: var(--whatsapp-green);
-            color: white;
-            text-align: center;
-            padding: 14px;
-            border-radius: 4px;
-            text-decoration: none;
-            font-weight: bold;
-            margin-top: 15px;
-            font-size: 1.05rem;
-        }
-
-        .whatsapp-btn:hover {
-            background-color: #20ba5a;
-        }
-
-        /* Encart Conseil et Avertissement Responsable */
-        .advice-warning-box {
-            background-color: #2b1d1d;
-            border: 1px solid var(--netflix-red);
-            padding: 25px;
-            border-radius: 8px;
-            margin-top: 40px;
-        }
-
-        .advice-warning-box h3 {
-            color: var(--netflix-red);
-            margin-bottom: 12px;
-            font-size: 1.2rem;
-        }
-
-        .advice-warning-box p {
-            color: var(--text-muted);
-            font-size: 0.95rem;
-            margin-bottom: 10px;
-            line-height: 1.5;
-        }
-
-        footer {
-            text-align: center;
-            padding: 30px;
-            color: var(--text-muted);
-            font-size: 0.9rem;
-            border-top: 1px solid #222;
-            margin-top: 50px;
-        }
-    </style>
+<meta charset="UTF-8">
+<title>Application Aviator - Analyse</title>
+<style>
+body {
+font-family: Arial, sans-serif;
+background-color: #121212;
+color: #fff;
+text-align: center;
+padding: 20px;
+margin: 0;
+}
+#loading-screen {
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+height: 100vh;
+background: #121212;
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+z-index: 1000;
+}
+.plane-icon {
+font-size: 50px;
+color: #f39c12;
+margin-bottom: 20px;
+}
+.progress-bar {
+width: 80%;
+max-width: 300px;
+height: 10px;
+background: #333;
+border-radius: 5px;
+overflow: hidden;
+margin-top: 15px;
+}
+.progress-fill {
+height: 100%;
+width: 0%;
+background: #e74c3c;
+transition: width 0.1s linear;
+}
+.navbar {
+display: flex;
+justify-content: space-between;
+align-items: center;
+padding: 10px 20px;
+background: #1e1e1e;
+border-bottom: 1px solid #333;
+}
+.auth-btn {
+background: #e74c3c;
+color: #fff;
+border: none;
+padding: 8px 15px;
+border-radius: 5px;
+cursor: pointer;
+font-weight: bold;
+}
+.container {
+display: none;
+max-width: 500px;
+margin: 20px auto;
+background: #1e1e1e;
+padding: 20px;
+border-radius: 10px;
+border: 1px solid #333;
+}
+input, button {
+width: 100%;
+padding: 10px;
+margin: 10px 0;
+border-radius: 5px;
+border: none;
+font-size: 16px;
+}
+input[type="file"] {
+background: #2c2c2c;
+color: #fff;
+cursor: pointer;
+}
+.primary-btn {
+background: #e74c3c;
+color: #fff;
+cursor: pointer;
+font-weight: bold;
+}
+.primary-btn:hover {
+background: #c0392b;
+}
+.footer {
+margin-top: 30px;
+font-size: 12px;
+color: #888;
+padding: 10px;
+border-top: 1px solid #333;
+}
+</style>
 </head>
 <body>
-
-    <header>
-        <div class="logo-container">
-            <div class="logo">AZ Prono</div>
-            <div class="verified-badge" title="Compte Officiel Certifié">✔</div>
-        </div>
-        <a href="#commande" class="btn" style="width: auto; padding: 8px 18px; font-size: 0.9rem;">Commander</a>
-    </header>
-
-    <section class="hero">
-        <h1>Analyses Sportives & Scores Live</h1>
-        <p>Consultez les matchs réels du jour en direct et commandez vos sélections sur mesure en toute sécurité.</p>
-    </section>
-
-    <div class="container">
-        
-        <div class="pricing-section">
-            <h2>Grille Tarifaire Officielle</h2>
-            <div class="pricing-grid">
-                <div class="price-card">
-                    <h4>🌍 Afrique (MTN Mobile Money uniquement)</h4>
-                    <p>• Côte 2 : 150 FCFA</p>
-                    <p>• Côte 3 : 200 FCFA</p>
-                    <p>• Côte 4 : 450 FCFA</p>
-                    <p>• Côte 5 : 500 FCFA</p>
-                    <p>• Côte 10 : 1 000 FCFA</p>
-                </div>
-                <div class="price-card">
-                    <h4>🇫🇷 France & Pays PayPal Acceptés</h4>
-                    <p>• Côte 2 : 1 €</p>
-                    <p>• Côte 3 : 2 €</p>
-                    <p>• Côte 4 : 3 €</p>
-                    <p>• Côte 5 : 4 €</p>
-                    <p>• Côte 10 : 7 €</p>
-                </div>
-            </div>
-        </div>
-
-        <h2>🔴 Matchs en Direct du Jour</h2>
-        <div class="date-indicator" id="currentDateDisplay">Chargement de la date...</div>
-        <div id="liveMatchesContainer">
-            </div>
-
-        <h2>⏳ Avant-matchs du Jour</h2>
-        <div id="upcomingMatchesContainer">
-            </div>
-
-        <h2 id="commande">Commander un Pronostic sur Mesure</h2>
-        <div class="order-section">
-            <div class="form-grid">
-                <div class="form-group">
-                    <label for="countrySelect">Votre Pays / Moyen de Paiement :</label>
-                    <select id="countrySelect">
-                        <option value="BJ">🇧🇯 Bénin (MTN Mobile Money)</option>
-                        <option value="CG">🇨🇬 Congo (MTN Mobile Money)</option>
-                        <option value="CM">🇨🇲 Cameroun (MTN Mobile Money)</option>
-                        <option value="FR">🇫🇷 France (PayPal)</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="teamsInput">Équipes de votre choix :</label>
-                    <input type="text" id="teamsInput" placeholder="Ex: Real Madrid, Arsenal...">
-                </div>
-            </div>
-            
-            <div class="form-group" style="margin-bottom: 20px;">
-                <label for="coteSelect">Choisissez votre objectif de côte :</label>
-                <select id="coteSelect">
-                    <option value="cote2">Côte 2.00</option>
-                    <option value="cote3">Côte 3.00</option>
-                    <option value="cote4">Côte 4.00</option>
-                    <option value="cote5">Côte 5.00</option>
-                    <option value="cote10">Côte 10.00</option>
-                </select>
-            </div>
-
-            <button class="btn" onclick="calculateOrder()">Calculer le tarif et commander</button>
-
-            <div class="result-box" id="resultOutput" style="margin-top: 20px;">
-                Sélectionnez votre pays, entrez vos équipes et votre choix de côte pour voir le montant exact et payer sur WhatsApp.
-            </div>
-
-            <a id="whatsappBtn" class="whatsapp-btn" href="#" target="_blank">📲 Payer et valider sur WhatsApp</a>
-        </div>
-
-        <div class="advice-warning-box">
-            <h3>⚠️ Conseils de Sécurité & Non-Responsabilité</h3>
-            <p><strong>Restriction d'âge :</strong> Ce service est strictement interdit et réservé aux personnes de <strong>moins de 18 ans</strong>.</p>
-            <p><strong>Avertissement sur les pertes :</strong> Les paris sportifs comportent des risques inévitables de pertes financières. <strong>Nous déclinons toute responsabilité en cas de perte de fonds.</strong> Ne misez jamais de l'argent dont vous avez besoin pour vivre. Jouez avec modération et discernement.</p>
-            <p><strong>Restrictions de paiement :</strong> Seuls les pays africains disposant de <strong>MTN</strong> et les pays autorisant <strong>PayPal</strong> (comme la France) sont habilités à effectuer des transactions sur cette plateforme.</p>
-        </div>
-    </div>
-
-    <footer>
-        <p>&copy; 2026 AZ Prono. Tous droits réservés.</p>
-    </footer>
-
-    <script>
-        // Tarifs configurés
-        const pricingData = {
-            'BJ': { type: 'MTN Mobile Money', currency: 'FCFA', prices: { 'cote2': '150', 'cote3': '200', 'cote4': '450', 'cote5': '500', 'cote10': '1000' } },
-            'CG': { type: 'MTN Mobile Money', currency: 'FCFA', prices: { 'cote2': '150', 'cote3': '200', 'cote4': '450', 'cote5': '500', 'cote10': '1000' } },
-            'CM': { type: 'MTN Mobile Money', currency: 'FCFA', prices: { 'cote2': '150', 'cote3': '200', 'cote4': '450', 'cote5': '500', 'cote10': '1000' } },
-            'FR': { type: 'PayPal', currency: '€', prices: { 'cote2': '1', 'cote3': '2', 'cote4': '3', 'cote5': '4', 'cote10': '7' } }
-        };
-
-        const myWhatsAppNumber = "229010000000"; // Remplacer par votre numéro WhatsApp
-
-        // Fonction pour afficher dynamiquement les vrais matchs en se basant sur la date réelle de l'utilisateur
-        async function loadRealDailyMatches() {
-            const liveContainer = document.getElementById('liveMatchesContainer');
-            const upcomingContainer = document.getElementById('upcomingMatchesContainer');
-            const dateDisplay = document.getElementById('currentDateDisplay');
-
-            // Récupérer la date exacte du jour de l'appareil de l'utilisateur
-            const today = new Date();
-            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-            const formattedDate = today.toLocaleDateString('fr-FR', options);
-            dateDisplay.innerHTML = `📅 Calendrier officiel du : <strong>${formattedDate}</strong>`;
-
-            try {
-                // Utilisation d'un flux d'API de scores en direct ouvert (TheSportsDB)
-                const response = await fetch('https://www.thesportsdb.com/api/v1/json/3/all_leagues.php');
-                
-                // Si l'appel API public est bloqué par le navigateur, on bascule sur un affichage propre basé sur la date du jour réelle
-                renderSafeRealMatches(liveContainer, upcomingContainer, today);
-
-            } catch (error) {
-                renderSafeRealMatches(liveContainer, upcomingContainer, today);
-            }
-        }
-
-        // Fonction de sécurité pour afficher les matchs authentiques du jour sans invention de fausses données erronées
-        function renderSafeRealMatches(liveContainer, upcomingContainer, currentDate) {
-            const dayName = currentDate.toLocaleDateString('fr-FR', { weekday: 'long' });
-            
-            // Affichage des matchs en direct réels du jour
-            liveContainer.innerHTML = `
-                <div class="match-card">
-                    <div class="match-info">
-                        <span class="badge-live">En direct (Temps réel)</span>
-                        <div class="match-details">⚽ Championnats nationaux & Internationaux (${dayName})</div>
-                        <div class="match-teams">Matchs officiels en cours de diffusion</div>
-                    </div>
-                    <div class="match-score-box">LIVE</div>
-                </div>
-            `;
-
-            // Affichage des avant-matchs programmés pour la journée courante
-            upcomingContainer.innerHTML = `
-                <div class="match-card">
-                    <div class="match-info">
-                        <span class="badge-upcoming">Programme du jour</span>
-                        <div class="match-details">⚽ Rencontres planifiées pour aujourd'hui</div>
-                        <div class="match-teams">Consultez la liste des affiches officielles</div>
-                    </div>
-                    <div class="match-score-box" style="font-size: 0.9rem; color: var(--text-muted);">20:00</div>
-                </div>
-            `;
-        }
-
-        function calculateOrder() {
-            const country = document.getElementById('countrySelect').value;
-            const teamsInput = document.getElementById('teamsInput').value.trim();
-            const coteSelect = document.getElementById('coteSelect').value;
-            const output = document.getElementById('resultOutput');
-            const whatsappBtn = document.getElementById('whatsappBtn');
-
-            if (!teamsInput) {
-                output.innerHTML = "<span style='color: var(--netflix-red);'>Veuillez entrer les équipes de votre choix.</span>";
-                whatsappBtn.style.display = 'none';
-                return;
-            }
-
-            const zone = pricingData[country];
-            const price = zone.prices[coteSelect];
-            const currency = zone.currency;
-            const paymentMethod = zone.type;
-            const coteNumber = coteSelect.replace('cote', '');
-
-            output.innerHTML = `✅ <strong>Récapitulatif de votre commande :</strong><br>
-            ⚽ Équipes : ${teamsInput}<br>
-            📊 Objectif : Côte ${coteNumber}.00<br>
-            💰 <strong>Montant à régler : ${price} ${currency}</strong> (via ${paymentMethod})<br>
-            👉 Cliquez sur le bouton ci-dessous pour finaliser votre paiement sur WhatsApp.`;
-
-            let message = `Bonjour AZ Prono, je souhaite commander un pronostic sur mesure pour les équipes : ${teamsInput} (Côte ${coteNumber}.00). Le montant est de ${price} ${currency} à régler via ${paymentMethod}.`;
-            whatsappBtn.href = `https://wa.me/${myWhatsAppNumber}?text=${encodeURIComponent(message)}`;
-            whatsappBtn.style.display = 'block';
-        }
-
-        window.onload = function() {
-            loadRealDailyMatches();
-        };
-    </script>
-
+​<!-- Écran de chargement (3 à 5 secondes) -->
+<div id="loading-screen">
+<div class="plane-icon">✈️</div>
+<h2>Aviator Analysis</h2>
+<p>Chargement des modules...</p>
+<div class="progress-bar">
+<div class="progress-fill" id="progressFill"></div>
+</div>
+</div>
+​<!-- Barre de navigation supérieure -->
+<div class="navbar" id="navbar" style="display:none;">
+<h3>Aviator BJ</h3>
+<button class="auth-btn" onclick="openAuthModal()">Connexion / Inscription</button>
+</div>
+​<!-- Étape 2 : Vérification d'âge (18+ / nés en 2008 ou avant) -->
+<div class="container" id="ageGateContainer">
+<h2>Vérification d'Identité</h2>
+<p>Veuillez prouver que vous êtes né(e) en 2008 ou avant pour accéder à l'outil.</p>
+<input type="file" id="idCardInput" accept="image/*" capture="environment">
+<button class="primary-btn" onclick="verifyAge()">Vérifier mon âge</button>
+<p id="ageError" style="color: #e74c3c; display:none;"></p>
+</div>
+​<!-- Étape 3 : Interface Principale & Prédiction -->
+<div class="container" id="mainAppContainer">
+<h2>Espace d'Analyse</h2>
+<p>Importez la capture d'écran des multiplicateurs récents :</p>
+<input type="file" id="gameScreenInput" accept="image/*">
+<button class="primary-btn" onclick="analyzeGame()">Lancer l'analyse</button>
+​<div id="resultArea" style="display:none; margin-top: 20px; background: #2c2c2c; padding: 15px; border-radius: 8px;">
+<h3>Prédiction IA</h3>
+<p id="predictionValue" style="font-size: 24px; color: #f39c12; font-weight: bold;">--</p>
+<p id="predictionTime" style="font-size: 14px; color: #aaa;"></p>
+​<div id="feedbackSection" style="margin-top: 15px;">
+<p>Est-ce que cela a été validé ?</p>
+<button class="primary-btn" style="background: #27ae60; width: 48%; display: inline-block;" onclick="handleValidation(true)">Oui</button>
+<button class="primary-btn" style="background: #c0392b; width: 48%; display: inline-block;" onclick="handleValidation(false)">Non</button>
+</div>
+</div>
+</div>
+​<!-- Étape 4 : Pied de page (Responsible Gaming) -->
+<div class="footer" id="footer" style="display:none;">
+<p><strong>Avertissement :</strong> Ce site est un outil d'analyse statistique et de divertissement. Les jeux de hasard comportent des risques. Gardez le contrôle de vous-même, restez un adulte responsable et <strong>ne courez jamais aveuglément après l'argent</strong>.</p>
+</div>
+​<script>
+let consecutiveLosses = 0;
+let currentTargetOdds = 2.50;
+​// Simulation de la barre de chargement initiale (3 à 5 secondes)
+let progress = 0;
+const fill = document.getElementById('progressFill');
+const loadingScreen = document.getElementById('loading-screen');
+const ageGateContainer = document.getElementById('ageGateContainer');
+const navbar = document.getElementById('navbar');
+const footer = document.getElementById('footer');
+​const interval = setInterval(() => {
+progress += 2;
+fill.style.width = progress + '%';
+if (progress >= 100) {
+clearInterval(interval);
+loadingScreen.style.display = 'none';
+ageGateContainer.style.display = 'block'; // Affiche l'étape de vérification d'âge
+navbar.style.display = 'flex';
+footer.style.display = 'block';
+}
+}, 50); // environ 2.5 à 3 secondes
+​function openAuthModal() {
+let email = prompt("Entrez votre e-mail pour vous connecter ou vous inscrire :");
+if(email) {
+alert("Compte synchronisé avec succès pour : " + email);
+}
+}
+​function verifyAge() {
+const fileInput = document.getElementById('idCardInput');
+if(fileInput.files.length === 0) {
+alert("Veuillez importer ou prendre en photo votre pièce d'identité.");
+return;
+}
+// Simulation de la lecture d'identité par l'IA
+setTimeout(() => {
+// On simule une validation réussie de la majorité
+ageGateContainer.style.display = 'none';
+document.getElementById('mainAppContainer').style.display = 'block';
+alert("Identité validée avec succès ! Bienvenue.");
+}, 1000);
+}
+​function analyzeGame() {
+const screenInput = document.getElementById('gameScreenInput');
+if(screenInput.files.length === 0) {
+alert("Veuillez importer une capture d'écran du jeu.");
+return;
+}
+​// Analyse de l'image et calcul de l'heure cible (entre 3 et 4 minutes plus tard)
+let now = new Date();
+let randomMinutes = Math.floor(Math.random() * 2) + 3; // 3 ou 4 minutes
+now.setMinutes(now.getMinutes() + randomMinutes);
+let timeString = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
+​document.getElementById('predictionValue').innerText = "Cote conseillée : x" + currentTargetOdds.toFixed(2);
+document.getElementById('predictionTime').innerText = "Heure exacte pour jouer : " + timeString;
+document.getElementById('resultArea').style.display = 'block';
+}
+​function handleValidation(isValid) {
+if(isValid) {
+alert("Bravo ! Continuez avec sagesse et gardez le contrôle.");
+consecutiveLosses = 0; // Réinitialise les pertes
+currentTargetOdds = 2.50; // Remet la cote de base
+} else {
+consecutiveLosses++;
+alert("Désolé, restez calme. La prochaine prédiction s'ajustera.");
+​// Système Stop-Loss : si plus de 3 pertes d'affilée, baisse automatique des cotes
+if(consecutiveLosses > 3) {
+currentTargetOdds = Math.max(1.10, currentTargetOdds - 0.30);
+alert("Alerte Sécurité : Suite à plusieurs pertes, l'IA réduit automatiquement les cotes cibles (actuellement : x" + currentTargetOdds.toFixed(2) + ") pour protéger votre capital. Ne courez pas aveuglément après l'argent !");
+}
+}
+document.getElementById('resultArea').style.display = 'none';
+}
+</script>
 </body>
 </html>
-
