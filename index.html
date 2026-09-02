@@ -1,223 +1,236 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<title>Application Aviator - Analyse</title>
-<style>
-body {
-font-family: Arial, sans-serif;
-background-color: #121212;
-color: #fff;
-text-align: center;
-padding: 20px;
-margin: 0;
-}
-#loading-screen {
-display: flex;
-flex-direction: column;
-justify-content: center;
-align-items: center;
-height: 100vh;
-background: #121212;
-position: fixed;
-top: 0;
-left: 0;
-width: 100%;
-z-index: 1000;
-}
-.plane-icon {
-font-size: 50px;
-color: #f39c12;
-margin-bottom: 20px;
-}
-.progress-bar {
-width: 80%;
-max-width: 300px;
-height: 10px;
-background: #333;
-border-radius: 5px;
-overflow: hidden;
-margin-top: 15px;
-}
-.progress-fill {
-height: 100%;
-width: 0%;
-background: #e74c3c;
-transition: width 0.1s linear;
-}
-.navbar {
-display: flex;
-justify-content: space-between;
-align-items: center;
-padding: 10px 20px;
-background: #1e1e1e;
-border-bottom: 1px solid #333;
-}
-.auth-btn {
-background: #e74c3c;
-color: #fff;
-border: none;
-padding: 8px 15px;
-border-radius: 5px;
-cursor: pointer;
-font-weight: bold;
-}
-.container {
-display: none;
-max-width: 500px;
-margin: 20px auto;
-background: #1e1e1e;
-padding: 20px;
-border-radius: 10px;
-border: 1px solid #333;
-}
-input, button {
-width: 100%;
-padding: 10px;
-margin: 10px 0;
-border-radius: 5px;
-border: none;
-font-size: 16px;
-}
-input[type="file"] {
-background: #2c2c2c;
-color: #fff;
-cursor: pointer;
-}
-.primary-btn {
-background: #e74c3c;
-color: #fff;
-cursor: pointer;
-font-weight: bold;
-}
-.primary-btn:hover {
-background: #c0392b;
-}
-.footer {
-margin-top: 30px;
-font-size: 12px;
-color: #888;
-padding: 10px;
-border-top: 1px solid #333;
-}
-</style>
+    <meta charset="UTF-8">
+    <title>Application Aviator - Analyse</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+            margin: 0;
+        }
+        #loading-screen {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: #121212;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+        .plane-icon {
+            font-size: 50px;
+            color: #f39c12;
+            margin-bottom: 20px;
+        }
+        .progress-bar {
+            width: 80%;
+            max-width: 300px;
+            height: 10px;
+            background: #333;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-top: 15px;
+        }
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: #e74c3c;
+            transition: width 0.1s linear;
+        }
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background: #1e1e1e;
+            border-bottom: 1px solid #333;
+        }
+        .auth-btn {
+            background: #e74c3c;
+            color: #fff;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .container {
+            display: none;
+            max-width: 500px;
+            margin: 20px auto;
+            background: #1e1e1e;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #333;
+        }
+        input, button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: none;
+            font-size: 16px;
+        }
+        input[type="file"] {
+            background: #2c2c2c;
+            color: #fff;
+            cursor: pointer;
+        }
+        .primary-btn {
+            background: #e74c3c;
+            color: #fff;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .primary-btn:hover {
+            background: #c0392b;
+        }
+        .footer {
+            margin-top: 30px;
+            font-size: 12px;
+            color: #888;
+            padding: 10px;
+            border-top: 1px solid #333;
+        }
+    </style>
 </head>
 <body>
-​<!-- Écran de chargement (3 à 5 secondes) -->
-<div id="loading-screen">
-<div class="plane-icon">✈️</div>
-<h2>Aviator Analysis</h2>
-<p>Chargement des modules...</p>
-<div class="progress-bar">
-<div class="progress-fill" id="progressFill"></div>
-</div>
-</div>
-​<!-- Barre de navigation supérieure -->
-<div class="navbar" id="navbar" style="display:none;">
-<h3>Aviator BJ</h3>
-<button class="auth-btn" onclick="openAuthModal()">Connexion / Inscription</button>
-</div>
-​<!-- Étape 2 : Vérification d'âge (18+ / nés en 2008 ou avant) -->
-<div class="container" id="ageGateContainer">
-<h2>Vérification d'Identité</h2>
-<p>Veuillez prouver que vous êtes né(e) en 2008 ou avant pour accéder à l'outil.</p>
-<input type="file" id="idCardInput" accept="image/*" capture="environment">
-<button class="primary-btn" onclick="verifyAge()">Vérifier mon âge</button>
-<p id="ageError" style="color: #e74c3c; display:none;"></p>
-</div>
-​<!-- Étape 3 : Interface Principale & Prédiction -->
-<div class="container" id="mainAppContainer">
-<h2>Espace d'Analyse</h2>
-<p>Importez la capture d'écran des multiplicateurs récents :</p>
-<input type="file" id="gameScreenInput" accept="image/*">
-<button class="primary-btn" onclick="analyzeGame()">Lancer l'analyse</button>
-​<div id="resultArea" style="display:none; margin-top: 20px; background: #2c2c2c; padding: 15px; border-radius: 8px;">
-<h3>Prédiction IA</h3>
-<p id="predictionValue" style="font-size: 24px; color: #f39c12; font-weight: bold;">--</p>
-<p id="predictionTime" style="font-size: 14px; color: #aaa;"></p>
-​<div id="feedbackSection" style="margin-top: 15px;">
-<p>Est-ce que cela a été validé ?</p>
-<button class="primary-btn" style="background: #27ae60; width: 48%; display: inline-block;" onclick="handleValidation(true)">Oui</button>
-<button class="primary-btn" style="background: #c0392b; width: 48%; display: inline-block;" onclick="handleValidation(false)">Non</button>
-</div>
-</div>
-</div>
-​<!-- Étape 4 : Pied de page (Responsible Gaming) -->
-<div class="footer" id="footer" style="display:none;">
-<p><strong>Avertissement :</strong> Ce site est un outil d'analyse statistique et de divertissement. Les jeux de hasard comportent des risques. Gardez le contrôle de vous-même, restez un adulte responsable et <strong>ne courez jamais aveuglément après l'argent</strong>.</p>
-</div>
-​<script>
-let consecutiveLosses = 0;
-let currentTargetOdds = 2.50;
-​// Simulation de la barre de chargement initiale (3 à 5 secondes)
-let progress = 0;
-const fill = document.getElementById('progressFill');
-const loadingScreen = document.getElementById('loading-screen');
-const ageGateContainer = document.getElementById('ageGateContainer');
-const navbar = document.getElementById('navbar');
-const footer = document.getElementById('footer');
-​const interval = setInterval(() => {
-progress += 2;
-fill.style.width = progress + '%';
-if (progress >= 100) {
-clearInterval(interval);
-loadingScreen.style.display = 'none';
-ageGateContainer.style.display = 'block'; // Affiche l'étape de vérification d'âge
-navbar.style.display = 'flex';
-footer.style.display = 'block';
-}
-}, 50); // environ 2.5 à 3 secondes
-​function openAuthModal() {
-let email = prompt("Entrez votre e-mail pour vous connecter ou vous inscrire :");
-if(email) {
-alert("Compte synchronisé avec succès pour : " + email);
-}
-}
-​function verifyAge() {
-const fileInput = document.getElementById('idCardInput');
-if(fileInput.files.length === 0) {
-alert("Veuillez importer ou prendre en photo votre pièce d'identité.");
-return;
-}
-// Simulation de la lecture d'identité par l'IA
-setTimeout(() => {
-// On simule une validation réussie de la majorité
-ageGateContainer.style.display = 'none';
-document.getElementById('mainAppContainer').style.display = 'block';
-alert("Identité validée avec succès ! Bienvenue.");
-}, 1000);
-}
-​function analyzeGame() {
-const screenInput = document.getElementById('gameScreenInput');
-if(screenInput.files.length === 0) {
-alert("Veuillez importer une capture d'écran du jeu.");
-return;
-}
-​// Analyse de l'image et calcul de l'heure cible (entre 3 et 4 minutes plus tard)
-let now = new Date();
-let randomMinutes = Math.floor(Math.random() * 2) + 3; // 3 ou 4 minutes
-now.setMinutes(now.getMinutes() + randomMinutes);
-let timeString = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
-​document.getElementById('predictionValue').innerText = "Cote conseillée : x" + currentTargetOdds.toFixed(2);
-document.getElementById('predictionTime').innerText = "Heure exacte pour jouer : " + timeString;
-document.getElementById('resultArea').style.display = 'block';
-}
-​function handleValidation(isValid) {
-if(isValid) {
-alert("Bravo ! Continuez avec sagesse et gardez le contrôle.");
-consecutiveLosses = 0; // Réinitialise les pertes
-currentTargetOdds = 2.50; // Remet la cote de base
-} else {
-consecutiveLosses++;
-alert("Désolé, restez calme. La prochaine prédiction s'ajustera.");
-​// Système Stop-Loss : si plus de 3 pertes d'affilée, baisse automatique des cotes
-if(consecutiveLosses > 3) {
-currentTargetOdds = Math.max(1.10, currentTargetOdds - 0.30);
-alert("Alerte Sécurité : Suite à plusieurs pertes, l'IA réduit automatiquement les cotes cibles (actuellement : x" + currentTargetOdds.toFixed(2) + ") pour protéger votre capital. Ne courez pas aveuglément après l'argent !");
-}
-}
-document.getElementById('resultArea').style.display = 'none';
-}
-</script>
+
+    <!-- Écran de chargement -->
+    <div id="loading-screen">
+        <div class="plane-icon">✈️</div>
+        <h2>Aviator Analysis</h2>
+        <p>Chargement des modules...</p>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+    </div>
+
+    <!-- Barre de navigation supérieure -->
+    <div class="navbar" id="navbar" style="display:none;">
+        <h3>Aviator BJ</h3>
+        <button class="auth-btn" onclick="openAuthModal()">Connexion / Inscription</button>
+    </div>
+
+    <!-- Étape 2 : Vérification d'âge -->
+    <div class="container" id="ageGateContainer">
+        <h2>Vérification d'Identité</h2>
+        <p>Veuillez prouver que vous êtes né(e) en 2008 ou avant pour accéder à l'outil.</p>
+        <input type="file" id="idCardInput" accept="image/*" capture="environment">
+        <button class="primary-btn" onclick="verifyAge()">Vérifier mon âge</button>
+        <p id="ageError" style="color: #e74c3c; display:none;"></p>
+    </div>
+
+    <!-- Étape 3 : Interface Principale & Prédiction -->
+    <div class="container" id="mainAppContainer">
+        <h2>Espace d'Analyse</h2>
+        <p>Importez la capture d'écran des multiplicateurs récents :</p>
+        <input type="file" id="gameScreenInput" accept="image/*">
+        <button class="primary-btn" onclick="analyzeGame()">Lancer l'analyse</button>
+
+        <div id="resultArea" style="display:none; margin-top: 20px; background: #2c2c2c; padding: 15px; border-radius: 8px;">
+            <h3>Prédiction IA</h3>
+            <p id="predictionValue" style="font-size: 24px; color: #f39c12; font-weight: bold;">--</p>
+            <p id="predictionTime" style="font-size: 14px; color: #aaa;"></p>
+
+            <div id="feedbackSection" style="margin-top: 15px;">
+                <p>Est-ce que cela a été validé ?</p>
+                <button class="primary-btn" style="background: #27ae60; width: 48%; display: inline-block;" onclick="handleValidation(true)">Oui</button>
+                <button class="primary-btn" style="background: #c0392b; width: 48%; display: inline-block;" onclick="handleValidation(false)">Non</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Étape 4 : Pied de page -->
+    <div class="footer" id="footer" style="display:none;">
+        <p><strong>Avertissement :</strong> Ce site est un outil d'analyse statistique et de divertissement. Les jeux de hasard comportent des risques. Gardez le contrôle de vous-même, restez un adulte responsable et <strong>ne courez jamais aveuglément après l'argent</strong>.</p>
+    </div>
+
+    <script>
+        let consecutiveLosses = 0;
+        let currentTargetOdds = 2.50;
+
+        let progress = 0;
+        const fill = document.getElementById('progressFill');
+        const loadingScreen = document.getElementById('loading-screen');
+        const ageGateContainer = document.getElementById('ageGateContainer');
+        const navbar = document.getElementById('navbar');
+        const footer = document.getElementById('footer');
+
+        const interval = setInterval(() => {
+            progress += 2;
+            fill.style.width = progress + '%';
+            if (progress >= 100) {
+                clearInterval(interval);
+                loadingScreen.style.display = 'none';
+                ageGateContainer.style.display = 'block';
+                navbar.style.display = 'flex';
+                footer.style.display = 'block';
+            }
+        }, 50);
+
+        function openAuthModal() {
+            let email = prompt("Entrez votre e-mail pour vous connecter ou vous inscrire :");
+            if(email) {
+                alert("Compte synchronisé avec succès pour : " + email);
+            }
+        }
+
+        function verifyAge() {
+            const fileInput = document.getElementById('idCardInput');
+            if(fileInput.files.length === 0) {
+                alert("Veuillez importer ou prendre en photo votre pièce d'identité.");
+                return;
+            }
+            setTimeout(() => {
+                ageGateContainer.style.display = 'none';
+                document.getElementById('mainAppContainer').style.display = 'block';
+                alert("Identité validée avec succès ! Bienvenue.");
+            }, 1000);
+        }
+
+        function analyzeGame() {
+            const screenInput = document.getElementById('gameScreenInput');
+            if(screenInput.files.length === 0) {
+                alert("Veuillez importer une capture d'écran du jeu.");
+                return;
+            }
+
+            let now = new Date();
+            let randomMinutes = Math.floor(Math.random() * 2) + 3;
+            now.setMinutes(now.getMinutes() + randomMinutes);
+            let timeString = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
+
+            document.getElementById('predictionValue').innerText = "Cote conseillée : x" + currentTargetOdds.toFixed(2);
+            document.getElementById('predictionTime').innerText = "Heure exacte pour jouer : " + timeString;
+            document.getElementById('resultArea').style.display = 'block';
+        }
+
+        function handleValidation(isValid) {
+            if(isValid) {
+                alert("Bravo ! Continuez avec sagesse et gardez le contrôle.");
+                consecutiveLosses = 0;
+                currentTargetOdds = 2.50;
+            } else {
+                consecutiveLosses++;
+                alert("Désolé, restez calme. La prochaine prédiction s'ajustera.");
+
+                if(consecutiveLosses > 3) {
+                    currentTargetOdds = Math.max(1.10, currentTargetOdds - 0.30);
+                    alert("Alerte Sécurité : Suite à plusieurs pertes, l'IA réduit automatiquement les cotes cibles (actuellement : x" + currentTargetOdds.toFixed(2) + ") pour protéger votre capital. Ne courez pas aveuglément après l'argent !");
+                }
+            }
+            document.getElementById('resultArea').style.display = 'none';
+        }
+    </script>
 </body>
 </html>
+
