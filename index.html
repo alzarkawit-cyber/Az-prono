@@ -2,6 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Application Aviator - Analyse</title>
     <style>
         body {
@@ -104,7 +105,7 @@
 </head>
 <body>
 
-    <!-- Écran de chargement -->
+    <!-- Écran de chargement (3 secondes) -->
     <div id="loading-screen">
         <div class="plane-icon">✈️</div>
         <h2>Aviator Analysis</h2>
@@ -120,19 +121,10 @@
         <button class="auth-btn" onclick="openAuthModal()">Connexion / Inscription</button>
     </div>
 
-    <!-- Étape 2 : Vérification d'âge -->
-    <div class="container" id="ageGateContainer">
-        <h2>Vérification d'Identité</h2>
-        <p>Veuillez prouver que vous êtes né(e) en 2008 ou avant pour accéder à l'outil.</p>
-        <input type="file" id="idCardInput" accept="image/*" capture="environment">
-        <button class="primary-btn" onclick="verifyAge()">Vérifier mon âge</button>
-        <p id="ageError" style="color: #e74c3c; display:none;"></p>
-    </div>
-
-    <!-- Étape 3 : Interface Principale & Prédiction -->
+    <!-- Interface Principale : Analyse Directe -->
     <div class="container" id="mainAppContainer">
         <h2>Espace d'Analyse</h2>
-        <p>Importez la capture d'écran des multiplicateurs récents :</p>
+        <p>Importez la capture d'écran du jeu :</p>
         <input type="file" id="gameScreenInput" accept="image/*">
         <button class="primary-btn" onclick="analyzeGame()">Lancer l'analyse</button>
 
@@ -149,7 +141,7 @@
         </div>
     </div>
 
-    <!-- Étape 4 : Pied de page -->
+    <!-- Pied de page -->
     <div class="footer" id="footer" style="display:none;">
         <p><strong>Avertissement :</strong> Ce site est un outil d'analyse statistique et de divertissement. Les jeux de hasard comportent des risques. Gardez le contrôle de vous-même, restez un adulte responsable et <strong>ne courez jamais aveuglément après l'argent</strong>.</p>
     </div>
@@ -161,17 +153,19 @@
         let progress = 0;
         const fill = document.getElementById('progressFill');
         const loadingScreen = document.getElementById('loading-screen');
-        const ageGateContainer = document.getElementById('ageGateContainer');
+        const mainAppContainer = document.getElementById('mainAppContainer');
         const navbar = document.getElementById('navbar');
         const footer = document.getElementById('footer');
 
+        // Animation du chargement
         const interval = setInterval(() => {
             progress += 2;
             fill.style.width = progress + '%';
             if (progress >= 100) {
                 clearInterval(interval);
                 loadingScreen.style.display = 'none';
-                ageGateContainer.style.display = 'block';
+                // Ouverture directe du cœur du site
+                mainAppContainer.style.display = 'block';
                 navbar.style.display = 'flex';
                 footer.style.display = 'block';
             }
@@ -182,19 +176,6 @@
             if(email) {
                 alert("Compte synchronisé avec succès pour : " + email);
             }
-        }
-
-        function verifyAge() {
-            const fileInput = document.getElementById('idCardInput');
-            if(fileInput.files.length === 0) {
-                alert("Veuillez importer ou prendre en photo votre pièce d'identité.");
-                return;
-            }
-            setTimeout(() => {
-                ageGateContainer.style.display = 'none';
-                document.getElementById('mainAppContainer').style.display = 'block';
-                alert("Identité validée avec succès ! Bienvenue.");
-            }, 1000);
         }
 
         function analyzeGame() {
@@ -233,4 +214,3 @@
     </script>
 </body>
 </html>
-
